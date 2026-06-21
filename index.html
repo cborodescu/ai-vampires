@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Coding Agents Survey</title>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --paper: rgba(255, 252, 246, 0.82);
+      --paper-strong: #fffdf8;
+      --ink: #1f1b17;
+      --muted: #6f675f;
+      --line: rgba(31, 27, 23, 0.12);
+      --accent: #b85c38;
+      --accent-soft: rgba(184, 92, 56, 0.14);
+      --accent-strong: #8f472b;
+      --shadow: 0 24px 60px rgba(53, 40, 27, 0.08);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(184, 92, 56, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(41, 102, 85, 0.1), transparent 22%),
+        linear-gradient(180deg, #f8f3eb 0%, #f0e8dc 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(31, 27, 23, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31, 27, 23, 0.02) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 85%);
+    }
+
+    .page {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      padding: 48px;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius-lg) + 8px);
+      background: linear-gradient(135deg, rgba(255, 253, 248, 0.92), rgba(255, 249, 242, 0.74));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184, 92, 56, 0.22), rgba(184, 92, 56, 0));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--muted);
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(184, 92, 56, 0.18);
+      background: rgba(184, 92, 56, 0.1);
+      color: var(--accent-strong);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .hero-link:hover,
+    .hero-link:focus-visible {
+      background: rgba(184, 92, 56, 0.16);
+      border-color: rgba(184, 92, 56, 0.32);
+      box-shadow: 0 10px 24px rgba(53, 40, 27, 0.08);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      max-width: 10ch;
+      margin-top: 18px;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 0.94;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.75;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .summary-card,
+    .section-card,
+    .question-card,
+    .comment-card {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-card {
+      padding: 18px;
+      border-radius: var(--radius-md);
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .summary-value {
+      margin-top: 10px;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .summary-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+
+    .section-card {
+      margin-top: 22px;
+      padding: 28px;
+      border-radius: var(--radius-lg);
+    }
+
+    .section-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .section-tag {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.62);
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .questions-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question-card {
+      padding: 22px;
+      border-radius: 22px;
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .question-title {
+      font-size: clamp(1.25rem, 2vw, 1.6rem);
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .pie-layout {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .pie-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pie-chart {
+      width: min(100%, 260px);
+      aspect-ratio: 1;
+      position: relative;
+    }
+
+    .pie-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 14px 28px rgba(53, 40, 27, 0.08));
+    }
+
+    .pie-segment {
+      cursor: pointer;
+      stroke: rgba(255, 252, 246, 0.92);
+      stroke-width: 2;
+      transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
+      transform-box: fill-box;
+      transform-origin: center;
+      opacity: 0.92;
+    }
+
+    .pie-segment:hover,
+    .pie-segment:focus-visible,
+    .pie-segment.is-active {
+      transform: translate(calc(var(--tx, 0) * 1px), calc(var(--ty, 0) * 1px));
+      opacity: 1;
+      filter: saturate(1.08) brightness(1.02);
+      outline: none;
+    }
+
+    .pie-hole {
+      fill: rgba(255, 252, 246, 0.94);
+      stroke: rgba(31, 27, 23, 0.12);
+      stroke-width: 1;
+    }
+
+    .pie-center {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 0 56px;
+      pointer-events: none;
+    }
+
+    .pie-total {
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      font-size: 2.1rem;
+      line-height: 1;
+    }
+
+    .pie-subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .pie-legend {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option-row {
+      display: grid;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.52);
+      border: 1px solid var(--line);
+    }
+
+    .pie-legend-button {
+      appearance: none;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .pie-legend-button:hover,
+    .pie-legend-button:focus-visible,
+    .pie-legend-button.is-active {
+      background: rgba(255, 255, 255, 0.76);
+      border-color: rgba(184, 92, 56, 0.28);
+      box-shadow: 0 10px 24px rgba(53, 40, 27, 0.06);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .option-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      max-width: 75%;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--swatch, var(--accent));
+      flex: 0 0 12px;
+      margin-top: 0.28em;
+      box-shadow: 0 0 0 1px rgba(31, 27, 23, 0.1);
+    }
+
+    .option-label-text {
+      flex: 1;
+    }
+
+    .option-value {
+      color: var(--muted);
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(31, 27, 23, 0.06);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: calc(var(--pct) * 1%);
+      min-width: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), #d79c57);
+    }
+
+    .scale-options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .scale-option {
+      display: grid;
+      gap: 8px;
+    }
+
+    .scale-option-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scale-label-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .scale-score {
+      min-width: 38px;
+      padding: 6px 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--line);
+      text-align: center;
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .scale-caption {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .scale-value {
+      color: var(--muted);
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    .question-footer {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .notes {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    footer {
+      margin-top: 22px;
+      padding: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .footer-link {
+      color: var(--accent-strong);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 180ms ease, border-color 180ms ease;
+    }
+
+    .footer-link:hover,
+    .footer-link:focus-visible {
+      color: var(--accent);
+      border-color: rgba(184, 92, 56, 0.35);
+      outline: none;
+    }
+
+    @media (max-width: 980px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100vw - 20px, 1000px);
+        padding-top: 12px;
+      }
+
+      .hero,
+      .section-card {
+        padding: 24px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pie-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .section-top,
+      .option-top,
+      .scale-option-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .option-label {
+        max-width: none;
+      }
+
+      h1 {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Survey snapshot · <a class="hero-link" href="">Read The Full Analysis</a></div>
+      <h1>AI Coding Agents Survey</h1>
+      <p class="hero-copy">
+        A minimal, readable overview of every question in the response sheet. The charts below are generated from the provided spreadsheet and keep the original answer wording intact, with scale questions shown on the recorded 1-5 scale.
+      </p>
+      <div class="summary-grid" id="summary"></div>
+    </section>
+
+    <section class="section-card">
+      <div class="section-top">
+        <div>
+          <h2>Response Breakdown</h2>
+          <p class="section-copy">Role, experience, company size, tool adoption, and daily usage.</p>
+        </div>
+        <div class="section-tag">Questions 1-5</div>
+      </div>
+      <div class="questions-grid" id="group-profile"></div>
+    </section>
+
+    <section class="section-card">
+      <div class="section-top">
+        <div>
+          <h2>Impact &amp; Sentiment</h2>
+          <p class="section-copy">Likert-style questions rendered as recorded in the spreadsheet, plus average scores for quick scanning.</p>
+        </div>
+        <div class="section-tag">Questions 6-14</div>
+      </div>
+      <div class="questions-grid" id="group-scale"></div>
+    </section>
+
+    <footer>
+      Copyright Chip Borodescu ·
+      <a class="footer-link" href="https://www.linkedin.com/in/cborodescu" target="_blank" rel="noreferrer">LinkedIn</a>
+      ·
+      <a class="footer-link" href="https://github.com/cborodescu/ai-vampires" target="_blank" rel="noreferrer">GitHub</a>
+    </footer>
+  </main>
+
+  <script>
+    const survey = {
+      responses: 89,
+      questions: [
+        {
+          col: "B",
+          question: "1. What best defines your current role?",
+          responses: 89,
+          type: "single",
+          options: [
+            { label: "Engineering", count: 61 },
+            { label: "Entrepreneur / Founder / Generalist", count: 23 },
+            { label: "AI Producer, Engineer", count: 1 },
+            { label: "consultant", count: 1 },
+            { label: "Naiba mai stie - product, engineering, corporatist, manager, cx", count: 1 },
+            { label: "creative", count: 1 },
+            { label: "Professional Services", count: 1 }
+          ]
+        },
+        {
+          col: "C",
+          question: "2. How many years of professional work experience do you have in your current field?",
+          responses: 89,
+          type: "single",
+          options: [
+            { label: "6-10 years", count: 29 },
+            { label: "16+ years", count: 21 },
+            { label: "11-15 years", count: 18 },
+            { label: "3-5 years", count: 12 },
+            { label: "1-2 years", count: 6 },
+            { label: "Less than 1 year", count: 3 }
+          ]
+        },
+        {
+          col: "D",
+          question: "3. What is the size of the organization you primarily work for?",
+          responses: 89,
+          type: "single",
+          options: [
+            { label: "2-10 employees", count: 15 },
+            { label: "Self-employed", count: 14 },
+            { label: "201-500 employees", count: 11 },
+            { label: "11-50 employees", count: 11 },
+            { label: "501-1,000 employees", count: 11 },
+            { label: "51-200 employees", count: 9 },
+            { label: "10,001+ employees", count: 8 },
+            { label: "1,001-5,000 employees", count: 7 },
+            { label: "5,001-10,000 employees", count: 3 }
+          ]
+        },
+        {
+          col: "E",
+          question: "4. Which AI coding agents do you use on a regular basis?",
+          responses: 89,
+          type: "multi",
+          selections: 178,
+          options: [
+            { label: "Claude Code", count: 73 },
+            { label: "Codex", count: 37 },
+            { label: "Cursor", count: 30 },
+            { label: "GitHub Copilot", count: 24 },
+            { label: "OpenCode", count: 5 },
+            { label: "AntiGravity", count: 1 },
+            { label: "Kiro", count: 1 },
+            { label: "KiloCode (a Roo/OpenCode fork)", count: 1 },
+            { label: "Gemini", count: 1 },
+            { label: "Antigravity/Gemini Cli", count: 1 },
+            { label: "Cody", count: 1 },
+            { label: "Deepseek", count: 1 },
+            { label: "Groch", count: 1 },
+            { label: "Lovable", count: 1 }
+          ]
+        },
+        {
+          col: "F",
+          question: "5. How much time do you estimate spending working with AI coding agents on a typical workday?",
+          responses: 89,
+          type: "single",
+          options: [
+            { label: "4-6 hours", count: 22 },
+            { label: "6-8 hours", count: 20 },
+            { label: "2-4 hours", count: 19 },
+            { label: "More than 8 hours", count: 14 },
+            { label: "1-2 hours", count: 9 },
+            { label: "Less than 1 hour", count: 5 }
+          ]
+        },
+        {
+          col: "G",
+          question: "6. Using AI coding agents helps me produce more engineering work, faster than I would otherwise.",
+          responses: 89,
+          type: "scale",
+          average: 4.42,
+          options: [
+            { label: "1", count: 4 },
+            { label: "2", count: 1 },
+            { label: "3", count: 7 },
+            { label: "4", count: 19 },
+            { label: "5", count: 58 }
+          ]
+        },
+        {
+          col: "H",
+          question: "7. Since using AI coding agents, my work has shifted from writing code directly toward directing, managing, or reviewing AI-generated work.",
+          responses: 89,
+          type: "scale",
+          average: 4.26,
+          options: [
+            { label: "1", count: 6 },
+            { label: "2", count: 2 },
+            { label: "3", count: 6 },
+            { label: "4", count: 24 },
+            { label: "5", count: 51 }
+          ]
+        },
+        {
+          col: "I",
+          question: "8. Since using AI coding agents, I feel more in control of the final output and confident in the technical direction of the work.",
+          responses: 89,
+          type: "scale",
+          average: 3.0,
+          options: [
+            { label: "1", count: 14 },
+            { label: "2", count: 19 },
+            { label: "3", count: 23 },
+            { label: "4", count: 19 },
+            { label: "5", count: 14 }
+          ]
+        },
+        {
+          col: "J",
+          question: "9. Since using AI coding agents, I have more time at work for enjoyable, meaningful, or creative activities.",
+          responses: 89,
+          type: "scale",
+          average: 2.9,
+          options: [
+            { label: "1", count: 25 },
+            { label: "2", count: 15 },
+            { label: "3", count: 16 },
+            { label: "4", count: 10 },
+            { label: "5", count: 23 }
+          ]
+        },
+        {
+          col: "K",
+          question: "10. My AI coding agent-assisted work has contributed to measurable business results, including customer growth, revenue growth, or improved retention.",
+          responses: 89,
+          type: "scale",
+          average: 3.46,
+          options: [
+            { label: "1", count: 11 },
+            { label: "2", count: 6 },
+            { label: "3", count: 28 },
+            { label: "4", count: 19 },
+            { label: "5", count: 25 }
+          ]
+        },
+        {
+          col: "L",
+          question: "11. After working with AI coding agents, I often feel mentally drained by the amount information I need to manage.",
+          responses: 89,
+          type: "scale",
+          average: 3.42,
+          options: [
+            { label: "1", count: 10 },
+            { label: "2", count: 15 },
+            { label: "3", count: 15 },
+            { label: "4", count: 26 },
+            { label: "5", count: 23 }
+          ]
+        },
+        {
+          col: "M",
+          question: "12. Since using AI coding agents, my work-related stress has increased.",
+          responses: 89,
+          type: "scale",
+          average: 2.79,
+          options: [
+            { label: "1", count: 20 },
+            { label: "2", count: 24 },
+            { label: "3", count: 14 },
+            { label: "4", count: 17 },
+            { label: "5", count: 14 }
+          ]
+        },
+        {
+          col: "N",
+          question: "13. Since using AI coding agents, my overall satisfaction and engagement at work has increased.",
+          responses: 89,
+          type: "scale",
+          average: 3.2,
+          options: [
+            { label: "1", count: 11 },
+            { label: "2", count: 19 },
+            { label: "3", count: 20 },
+            { label: "4", count: 19 },
+            { label: "5", count: 20 }
+          ]
+        },
+        {
+          col: "O",
+          question: "14. Since using AI coding agents, my ability to disconnect and recover after work has improved.",
+          responses: 89,
+          type: "scale",
+          average: 2.72,
+          options: [
+            { label: "1", count: 18 },
+            { label: "2", count: 24 },
+            { label: "3", count: 22 },
+            { label: "4", count: 15 },
+            { label: "5", count: 10 }
+          ]
+        }
+      ]
+    };
+
+    function getDisplayQuestion(question) {
+      if (!["B", "E"].includes(question.col) || !["single", "multi"].includes(question.type)) {
+        return question;
+      }
+
+      const threshold = 0.05;
+      const baseTotal = question.type === "multi" ? question.selections : question.responses;
+      const majorOptions = [];
+      const groupedOptions = [];
+
+      question.options.forEach((option) => {
+        if ((option.count / baseTotal) < threshold) {
+          groupedOptions.push(option);
+          return;
+        }
+
+        majorOptions.push(option);
+      });
+
+      const displayQuestion = {
+        ...question,
+        options: [...majorOptions],
+        groupedIntoOthers: groupedOptions.length > 0
+      };
+
+      if (groupedOptions.length > 0) {
+        displayQuestion.options.push({
+          label: "Others",
+          count: groupedOptions.reduce((sum, option) => sum + option.count, 0),
+          groupedLabels: groupedOptions.map((option) => option.label)
+        });
+      }
+
+      return displayQuestion;
+    }
+
+    const displayQuestions = survey.questions.map(getDisplayQuestion);
+    const profileQuestions = displayQuestions.filter((item) => ["single", "multi"].includes(item.type));
+    const scaleQuestions = displayQuestions.filter((item) => item.type === "scale");
+
+    const summaryItems = [
+      {
+        label: "Responses",
+        value: survey.responses,
+        note: "Total submitted entries in the workbook."
+      },
+      {
+        label: "Top Role",
+        value: "Engineering",
+        note: "61 of 89 respondents."
+      },
+      {
+        label: "Most Used Agent",
+        value: "Claude Code",
+        note: "Used by 73 respondents across multi-select answers."
+      },
+      {
+        label: "Typical Daily Use",
+        value: "4-6 hours",
+        note: "Largest time bucket with 22 responses."
+      }
+    ];
+
+    const formatPct = (value, total) => `${Math.round((value / total) * 100)}%`;
+    const pieColors = [
+      "#b85c38",
+      "#d79c57",
+      "#2f7f73",
+      "#7c6a54",
+      "#a64d79",
+      "#5f7adb",
+      "#5b8c5a",
+      "#d17a22",
+      "#8f472b",
+      "#a79a8b",
+      "#6a4c93",
+      "#a23e48",
+      "#2e5eaa",
+      "#5c8f82",
+      "#c08b5c",
+      "#6b705c"
+    ];
+
+    function getChartTotal(question) {
+      return question.type === "multi" ? question.selections : question.responses;
+    }
+
+    const questionByCol = Object.fromEntries(displayQuestions.map((question) => [question.col, question]));
+    const piePinnedState = new Map();
+
+    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+      const angleInRadians = (angleInDegrees - 90) * (Math.PI / 180);
+
+      return {
+        x: centerX + (radius * Math.cos(angleInRadians)),
+        y: centerY + (radius * Math.sin(angleInRadians))
+      };
+    }
+
+    function describeDonutSlice(centerX, centerY, outerRadius, innerRadius, startAngle, endAngle) {
+      const outerStart = polarToCartesian(centerX, centerY, outerRadius, startAngle);
+      const outerEnd = polarToCartesian(centerX, centerY, outerRadius, endAngle);
+      const innerEnd = polarToCartesian(centerX, centerY, innerRadius, startAngle);
+      const innerStart = polarToCartesian(centerX, centerY, innerRadius, endAngle);
+      const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+
+      return [
+        "M", outerStart.x, outerStart.y,
+        "A", outerRadius, outerRadius, 0, largeArcFlag, 1, outerEnd.x, outerEnd.y,
+        "L", innerStart.x, innerStart.y,
+        "A", innerRadius, innerRadius, 0, largeArcFlag, 0, innerEnd.x, innerEnd.y,
+        "Z"
+      ].join(" ");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function getPieSegments(question) {
+      const total = getChartTotal(question);
+      let currentAngle = 0;
+
+      return question.options.map((option, index) => {
+        const angleSize = (option.count / total) * 360;
+        const startAngle = currentAngle;
+        const endAngle = currentAngle + angleSize;
+        const midAngle = startAngle + (angleSize / 2);
+        const offset = polarToCartesian(0, 0, 6, midAngle);
+        currentAngle = endAngle;
+
+        return {
+          index,
+          option,
+          color: pieColors[index % pieColors.length],
+          startAngle,
+          endAngle,
+          tx: offset.x.toFixed(2),
+          ty: offset.y.toFixed(2),
+          percent: formatPct(option.count, total),
+          path: describeDonutSlice(110, 110, 100, 58, startAngle, endAngle)
+        };
+      });
+    }
+
+    function renderSummary() {
+      const root = document.getElementById("summary");
+      root.innerHTML = summaryItems.map((item) => `
+        <article class="summary-card">
+          <div class="summary-label">${item.label}</div>
+          <div class="summary-value">${item.value}</div>
+          <div class="summary-note">${item.note}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderPie(question) {
+      const total = getChartTotal(question);
+      const subtitle = question.type === "multi" ? "total selections" : "total responses";
+      const segments = getPieSegments(question);
+
+      return `
+        <div class="pie-widget" data-question-id="${question.col}">
+          <div class="pie-layout">
+            <div class="pie-wrap">
+              <div class="pie-chart">
+                <svg class="pie-svg" viewBox="0 0 220 220" aria-label="${escapeHtml(question.question)}">
+                  ${segments.map((segment) => `
+                    <path
+                      class="pie-segment"
+                      data-index="${segment.index}"
+                      tabindex="0"
+                      role="button"
+                      aria-label="${escapeHtml(`${segment.option.label}: ${segment.option.count} (${segment.percent})`)}"
+                      style="--tx:${segment.tx}; --ty:${segment.ty};"
+                      fill="${segment.color}"
+                      d="${segment.path}"
+                    >
+                      <title>${escapeHtml(`${segment.option.label}: ${segment.option.count} (${segment.percent})`)}</title>
+                    </path>
+                  `).join("")}
+                  <circle class="pie-hole" cx="110" cy="110" r="58"></circle>
+                </svg>
+              <div class="pie-center">
+                <div>
+                  <div class="pie-total">${total}</div>
+                  <div class="pie-subtitle">${subtitle}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="pie-legend">
+              ${segments.map((segment) => `
+                <button type="button" class="option-row pie-legend-button" data-index="${segment.index}" aria-pressed="false">
+                  <div class="option-top">
+                    <div class="option-label">
+                      <span class="swatch" style="--swatch:${segment.color}"></span>
+                      <span class="option-label-text">${segment.option.label}</span>
+                    </div>
+                    <div class="option-value">${segment.option.count} · ${segment.percent}</div>
+                  </div>
+                </button>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderScale(question) {
+      return `
+        <div class="scale-options">
+          ${question.options.map((option) => `
+            <div class="scale-option">
+              <div class="scale-option-top">
+                <div class="scale-label-wrap">
+                  <div class="scale-score">${option.label}</div>
+                  <div class="scale-caption">Score ${option.label}</div>
+                </div>
+                <div class="scale-value">${option.count} · ${formatPct(option.count, question.responses)}</div>
+              </div>
+              <div class="bar">
+                <div class="bar-fill" style="--pct:${(option.count / question.responses) * 100}"></div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderQuestion(question) {
+      const isMulti = question.type === "multi";
+      const isScale = question.type === "scale";
+      const multiAverage = isMulti ? (question.selections / question.responses).toFixed(2) : null;
+
+      return `
+        <article class="question-card">
+          <div class="question-meta">
+            ${isMulti ? `<span class="pill">Avg. ${multiAverage} tools / respondent</span>` : ""}
+            ${isScale ? `<span class="pill">Avg. score ${question.average.toFixed(2)} / 5</span>` : ""}
+            ${isMulti ? `<span>${question.selections} total selections</span>` : ""}
+          </div>
+          <h3 class="question-title">${question.question}</h3>
+          ${isScale ? renderScale(question) : renderPie(question)}
+          <div class="question-footer">
+            <span>${question.options.length} answer options shown</span>
+            ${isScale ? "" : isMulti ? "<span>Pie slices and percentages are based on total selections</span>" : "<span>Pie slices and percentages are based on total responses</span>"}
+            ${question.groupedIntoOthers ? "<span>Responses under 5% are grouped into Others</span>" : ""}
+            ${isScale ? "<span>Scale values are shown exactly as recorded in the sheet</span>" : ""}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderQuestions() {
+      document.getElementById("group-profile").innerHTML = profileQuestions.map(renderQuestion).join("");
+      document.getElementById("group-scale").innerHTML = scaleQuestions.map(renderQuestion).join("");
+    }
+
+    function updatePieWidget(widget, activeIndex) {
+      const question = questionByCol[widget.dataset.questionId];
+      const totalNode = widget.querySelector(".pie-total");
+      const subtitleNode = widget.querySelector(".pie-subtitle");
+      const pinnedIndex = piePinnedState.get(question.col);
+      const visibleIndex = activeIndex ?? pinnedIndex;
+
+      widget.querySelectorAll(".pie-segment").forEach((segment) => {
+        const isActive = Number(segment.dataset.index) === visibleIndex;
+        segment.classList.toggle("is-active", isActive);
+        segment.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+
+      widget.querySelectorAll(".pie-legend-button").forEach((button) => {
+        const isActive = Number(button.dataset.index) === visibleIndex;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+
+      if (visibleIndex == null) {
+        totalNode.textContent = getChartTotal(question);
+        subtitleNode.textContent = question.type === "multi" ? "total selections" : "total responses";
+        return;
+      }
+
+      const option = question.options[visibleIndex];
+      const total = getChartTotal(question);
+      totalNode.textContent = option.count;
+      subtitleNode.textContent = `${option.label} · ${formatPct(option.count, total)}`;
+    }
+
+    function togglePinnedSlice(widget, index) {
+      const questionId = widget.dataset.questionId;
+      const currentPinned = piePinnedState.get(questionId);
+      piePinnedState.set(questionId, currentPinned === index ? null : index);
+      updatePieWidget(widget, null);
+    }
+
+    function initPieInteractions() {
+      document.querySelectorAll(".pie-widget").forEach((widget) => {
+        const questionId = widget.dataset.questionId;
+        piePinnedState.set(questionId, null);
+        updatePieWidget(widget, null);
+
+        widget.querySelectorAll(".pie-segment, .pie-legend-button").forEach((node) => {
+          const index = Number(node.dataset.index);
+
+          node.addEventListener("mouseenter", () => {
+            updatePieWidget(widget, index);
+          });
+
+          node.addEventListener("focus", () => {
+            updatePieWidget(widget, index);
+          });
+
+          node.addEventListener("click", () => {
+            togglePinnedSlice(widget, index);
+          });
+
+          if (node.classList.contains("pie-segment")) {
+            node.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                togglePinnedSlice(widget, index);
+              }
+            });
+          }
+        });
+
+        widget.addEventListener("mouseleave", () => {
+          updatePieWidget(widget, null);
+        });
+
+        widget.addEventListener("focusout", (event) => {
+          if (!widget.contains(event.relatedTarget)) {
+            updatePieWidget(widget, null);
+          }
+        });
+      });
+    }
+
+    renderSummary();
+    renderQuestions();
+    initPieInteractions();
+  </script>
+</body>
+</html>

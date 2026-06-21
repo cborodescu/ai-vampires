@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🧛 AI Coding Agents Survey</title>
+  <script>
+    (function () {
+      var theme = "dark";
+      var hasStoredTheme = false;
+      try {
+        var storedTheme = localStorage.getItem("ai-vampires-theme");
+        hasStoredTheme = Boolean(storedTheme);
+        theme = storedTheme || theme;
+      } catch (error) {}
+      if (!hasStoredTheme && window.matchMedia) {
+        theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
   <style>
     :root {
       --bg: #0d0a10;
@@ -19,6 +34,100 @@
       --radius-lg: 28px;
       --radius-md: 18px;
       --radius-sm: 12px;
+      --page-background:
+        radial-gradient(circle at top left, rgba(157, 24, 52, 0.24), transparent 26%),
+        radial-gradient(circle at 82% 12%, rgba(90, 14, 35, 0.32), transparent 18%),
+        radial-gradient(circle at bottom center, rgba(56, 19, 41, 0.32), transparent 32%),
+        linear-gradient(180deg, #120d14 0%, #0b090d 100%);
+      --grid-overlay:
+        linear-gradient(rgba(255, 239, 243, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 239, 243, 0.02) 1px, transparent 1px);
+      --hero-surface:
+        linear-gradient(135deg, rgba(36, 23, 33, 0.94), rgba(20, 14, 22, 0.82)),
+        radial-gradient(circle at top right, rgba(157, 24, 52, 0.18), transparent 28%);
+      --hero-orb: radial-gradient(circle, rgba(157, 24, 52, 0.28), rgba(157, 24, 52, 0));
+      --eyebrow-bg: rgba(255, 255, 255, 0.04);
+      --hero-link-border: rgba(240, 193, 203, 0.16);
+      --hero-link-bg: rgba(157, 24, 52, 0.22);
+      --hero-link-bg-hover: rgba(157, 24, 52, 0.32);
+      --hero-link-border-hover: rgba(240, 193, 203, 0.28);
+      --hero-link-shadow: 0 14px 28px rgba(0, 0, 0, 0.26);
+      --tag-bg: rgba(255, 255, 255, 0.05);
+      --pie-shadow: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.34));
+      --pie-stroke: rgba(17, 11, 16, 0.95);
+      --pie-hole-fill: rgba(25, 17, 24, 0.96);
+      --pie-hole-stroke: rgba(255, 233, 238, 0.08);
+      --option-bg: rgba(255, 255, 255, 0.03);
+      --option-bg-hover: rgba(157, 24, 52, 0.1);
+      --option-border-hover: rgba(240, 193, 203, 0.22);
+      --option-hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      --swatch-ring: rgba(255, 233, 238, 0.08);
+      --bar-bg: rgba(255, 255, 255, 0.08);
+      --bar-fill: linear-gradient(90deg, #7a1028, #c63a5b 58%, #f0c1cb 100%);
+      --score-bg: rgba(255, 255, 255, 0.04);
+      --footer-link-hover: #ffd7df;
+      --footer-link-border-hover: rgba(240, 193, 203, 0.3);
+      --toggle-bg: rgba(255, 255, 255, 0.04);
+      --toggle-button-bg: transparent;
+      --toggle-button-active-bg: rgba(157, 24, 52, 0.26);
+      --toggle-button-active-border: rgba(240, 193, 203, 0.22);
+    }
+
+    html {
+      color-scheme: dark;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f5f0e8;
+      --paper: rgba(255, 252, 246, 0.82);
+      --paper-strong: rgba(255, 253, 248, 0.94);
+      --ink: #1f1b17;
+      --muted: #6f675f;
+      --line: rgba(31, 27, 23, 0.12);
+      --accent: #b85c38;
+      --accent-soft: rgba(184, 92, 56, 0.14);
+      --accent-strong: #8f472b;
+      --shadow: 0 24px 60px rgba(53, 40, 27, 0.08);
+      --page-background:
+        radial-gradient(circle at top left, rgba(184, 92, 56, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(41, 102, 85, 0.1), transparent 22%),
+        linear-gradient(180deg, #f8f3eb 0%, #f0e8dc 100%);
+      --grid-overlay:
+        linear-gradient(rgba(31, 27, 23, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31, 27, 23, 0.02) 1px, transparent 1px);
+      --hero-surface:
+        linear-gradient(135deg, rgba(255, 253, 248, 0.92), rgba(255, 249, 242, 0.74)),
+        radial-gradient(circle at top right, rgba(184, 92, 56, 0.12), transparent 28%);
+      --hero-orb: radial-gradient(circle, rgba(184, 92, 56, 0.22), rgba(184, 92, 56, 0));
+      --eyebrow-bg: rgba(255, 255, 255, 0.55);
+      --hero-link-border: rgba(184, 92, 56, 0.18);
+      --hero-link-bg: rgba(184, 92, 56, 0.1);
+      --hero-link-bg-hover: rgba(184, 92, 56, 0.16);
+      --hero-link-border-hover: rgba(184, 92, 56, 0.32);
+      --hero-link-shadow: 0 10px 24px rgba(53, 40, 27, 0.08);
+      --tag-bg: rgba(255, 255, 255, 0.62);
+      --pie-shadow: drop-shadow(0 14px 28px rgba(53, 40, 27, 0.08));
+      --pie-stroke: rgba(255, 252, 246, 0.92);
+      --pie-hole-fill: rgba(255, 252, 246, 0.94);
+      --pie-hole-stroke: rgba(31, 27, 23, 0.12);
+      --option-bg: rgba(255, 255, 255, 0.52);
+      --option-bg-hover: rgba(255, 255, 255, 0.76);
+      --option-border-hover: rgba(184, 92, 56, 0.28);
+      --option-hover-shadow: 0 10px 24px rgba(53, 40, 27, 0.06);
+      --swatch-ring: rgba(31, 27, 23, 0.1);
+      --bar-bg: rgba(31, 27, 23, 0.06);
+      --bar-fill: linear-gradient(90deg, var(--accent), #d79c57);
+      --score-bg: rgba(255, 255, 255, 0.7);
+      --footer-link-hover: var(--accent);
+      --footer-link-border-hover: rgba(184, 92, 56, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.62);
+      --toggle-button-bg: transparent;
+      --toggle-button-active-bg: rgba(184, 92, 56, 0.12);
+      --toggle-button-active-border: rgba(184, 92, 56, 0.2);
     }
 
     * {
@@ -33,11 +142,7 @@
       margin: 0;
       font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
       color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(157, 24, 52, 0.24), transparent 26%),
-        radial-gradient(circle at 82% 12%, rgba(90, 14, 35, 0.32), transparent 18%),
-        radial-gradient(circle at bottom center, rgba(56, 19, 41, 0.32), transparent 32%),
-        linear-gradient(180deg, #120d14 0%, #0b090d 100%);
+      background: var(--page-background);
       min-height: 100vh;
     }
 
@@ -46,9 +151,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255, 239, 243, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 239, 243, 0.02) 1px, transparent 1px);
+      background-image: var(--grid-overlay);
       background-size: 24px 24px;
       mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 85%);
     }
@@ -65,9 +168,7 @@
       padding: 48px;
       border: 1px solid var(--line);
       border-radius: calc(var(--radius-lg) + 8px);
-      background:
-        linear-gradient(135deg, rgba(36, 23, 33, 0.94), rgba(20, 14, 22, 0.82)),
-        radial-gradient(circle at top right, rgba(157, 24, 52, 0.18), transparent 28%);
+      background: var(--hero-surface);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
       overflow: hidden;
@@ -82,7 +183,21 @@
       width: 220px;
       height: 220px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(157, 24, 52, 0.28), rgba(157, 24, 52, 0));
+      background: var(--hero-orb);
+      pointer-events: none;
+    }
+
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .eyebrow {
@@ -92,7 +207,7 @@
       padding: 8px 12px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--eyebrow-bg);
       color: var(--muted);
       font-size: 0.84rem;
       letter-spacing: 0.04em;
@@ -105,8 +220,8 @@
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(240, 193, 203, 0.16);
-      background: rgba(157, 24, 52, 0.22);
+      border: 1px solid var(--hero-link-border);
+      background: var(--hero-link-bg);
       color: var(--accent-strong);
       text-decoration: none;
       font-weight: 700;
@@ -116,11 +231,50 @@
 
     .hero-link:hover,
     .hero-link:focus-visible {
-      background: rgba(157, 24, 52, 0.32);
-      border-color: rgba(240, 193, 203, 0.28);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26);
+      background: var(--hero-link-bg-hover);
+      border-color: var(--hero-link-border-hover);
+      box-shadow: var(--hero-link-shadow);
       transform: translateY(-1px);
       outline: none;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--toggle-bg);
+      backdrop-filter: blur(12px);
+    }
+
+    .theme-button {
+      appearance: none;
+      border: 1px solid transparent;
+      background: var(--toggle-button-bg);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .theme-button:hover,
+    .theme-button:focus-visible {
+      color: var(--ink);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .theme-button.is-active {
+      background: var(--toggle-button-active-bg);
+      border-color: var(--toggle-button-active-border);
+      color: var(--accent-strong);
     }
 
     h1,
@@ -214,7 +368,7 @@
       padding: 8px 12px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--tag-bg);
       white-space: nowrap;
       color: var(--muted);
       font-size: 0.85rem;
@@ -290,12 +444,12 @@
       width: 100%;
       height: 100%;
       overflow: visible;
-      filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.34));
+      filter: var(--pie-shadow);
     }
 
     .pie-segment {
       cursor: pointer;
-      stroke: rgba(17, 11, 16, 0.95);
+      stroke: var(--pie-stroke);
       stroke-width: 2;
       transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
       transform-box: fill-box;
@@ -313,8 +467,8 @@
     }
 
     .pie-hole {
-      fill: rgba(25, 17, 24, 0.96);
-      stroke: rgba(255, 233, 238, 0.08);
+      fill: var(--pie-hole-fill);
+      stroke: var(--pie-hole-stroke);
       stroke-width: 1;
     }
 
@@ -352,7 +506,7 @@
       gap: 8px;
       padding: 12px 14px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--option-bg);
       border: 1px solid var(--line);
     }
 
@@ -369,9 +523,9 @@
     .pie-legend-button:hover,
     .pie-legend-button:focus-visible,
     .pie-legend-button.is-active {
-      background: rgba(157, 24, 52, 0.1);
-      border-color: rgba(240, 193, 203, 0.22);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      background: var(--option-bg-hover);
+      border-color: var(--option-border-hover);
+      box-shadow: var(--option-hover-shadow);
       transform: translateY(-1px);
       outline: none;
     }
@@ -399,7 +553,7 @@
       background: var(--swatch, var(--accent));
       flex: 0 0 12px;
       margin-top: 0.28em;
-      box-shadow: 0 0 0 1px rgba(255, 233, 238, 0.08);
+      box-shadow: 0 0 0 1px var(--swatch-ring);
     }
 
     .option-label-text {
@@ -415,7 +569,7 @@
     .bar {
       height: 12px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--bar-bg);
       overflow: hidden;
     }
 
@@ -424,7 +578,9 @@
       width: calc(var(--pct) * 1%);
       min-width: 10px;
       border-radius: 999px;
-      background: linear-gradient(90deg, #7a1028, #c63a5b 58%, #f0c1cb 100%);
+      background: var(--bar-fill);
+      transition: filter 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      transform-origin: left center;
     }
 
     .scale-options {
@@ -433,8 +589,53 @@
     }
 
     .scale-option {
+      appearance: none;
+      width: 100%;
       display: grid;
       gap: 8px;
+      padding: 14px 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent),
+        var(--option-bg);
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scale-option::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent 55%);
+      opacity: 0;
+      transition: opacity 180ms ease;
+      pointer-events: none;
+    }
+
+    .scale-options:hover .scale-option:not(:hover),
+    .scale-options:focus-within .scale-option:not(:focus-visible) {
+      opacity: 0.74;
+    }
+
+    .scale-option:hover,
+    .scale-option:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--option-border-hover);
+      box-shadow: var(--option-hover-shadow);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent),
+        var(--option-bg-hover);
+      outline: none;
+    }
+
+    .scale-option:hover::before,
+    .scale-option:focus-visible::before {
+      opacity: 1;
     }
 
     .scale-option-top {
@@ -451,27 +652,36 @@
     }
 
     .scale-score {
-      min-width: 38px;
-      padding: 6px 0;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--line);
-      text-align: center;
       font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
       font-size: 1.1rem;
-      line-height: 1;
-    }
-
-    .scale-caption {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.4;
+      line-height: 1.2;
+      color: var(--ink);
+      transition: transform 180ms ease, color 180ms ease;
     }
 
     .scale-value {
       color: var(--muted);
       white-space: nowrap;
       font-size: 0.9rem;
+      transition: color 180ms ease, transform 180ms ease;
+    }
+
+    .scale-option:hover .scale-score,
+    .scale-option:focus-visible .scale-score {
+      transform: scale(1.06);
+      color: var(--accent-strong);
+    }
+
+    .scale-option:hover .scale-value,
+    .scale-option:focus-visible .scale-value {
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .scale-option:hover .bar-fill,
+    .scale-option:focus-visible .bar-fill {
+      filter: saturate(1.12) brightness(1.05);
+      box-shadow: 0 0 18px rgba(198, 58, 91, 0.18);
     }
 
     .question-footer {
@@ -509,8 +719,8 @@
 
     .footer-link:hover,
     .footer-link:focus-visible {
-      color: #ffd7df;
-      border-color: rgba(240, 193, 203, 0.3);
+      color: var(--footer-link-hover);
+      border-color: var(--footer-link-border-hover);
       outline: none;
     }
 
@@ -546,6 +756,10 @@
         align-items: flex-start;
       }
 
+      .hero-top {
+        align-items: flex-start;
+      }
+
       .option-label {
         max-width: none;
       }
@@ -559,7 +773,13 @@
 <body>
   <main class="page">
     <section class="hero">
-      <div class="eyebrow">Survey snapshot · <a class="hero-link" href="%5BEnglish%5D%20The%20Twilight%20of%20AI%20Vampires.md">Read The Full Analysis</a></div>
+      <div class="hero-top">
+        <div class="eyebrow">Survey snapshot · <a class="hero-link" href="%5BEnglish%5D%20The%20Twilight%20of%20AI%20Vampires.md">Read The Full Analysis</a></div>
+        <div class="theme-toggle" aria-label="Theme selector">
+          <button class="theme-button" type="button" data-theme-option="dark" aria-pressed="true">Dark</button>
+          <button class="theme-button" type="button" data-theme-option="light" aria-pressed="false">Light</button>
+        </div>
+      </div>
       <h1>AI Coding Agents Survey</h1>
       <p class="hero-copy">
         A minimal, readable overview of every question in the response sheet. The charts below are generated from the provided spreadsheet and keep the original answer wording intact, with scale questions shown on the recorded 1-5 scale.
@@ -813,6 +1033,50 @@
       ]
     };
 
+    const themeStorageKey = "ai-vampires-theme";
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+
+      document.querySelectorAll("[data-theme-option]").forEach((button) => {
+        const isActive = button.dataset.themeOption === theme;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+    }
+
+    function initThemeToggle() {
+      let theme = "dark";
+      let hasStoredTheme = false;
+
+      try {
+        const storedTheme = localStorage.getItem(themeStorageKey);
+        hasStoredTheme = Boolean(storedTheme);
+        theme = storedTheme || theme;
+      } catch (error) {
+        theme = "dark";
+      }
+
+      if (!hasStoredTheme && window.matchMedia) {
+        theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+
+      applyTheme(theme);
+
+      document.querySelectorAll("[data-theme-option]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextTheme = button.dataset.themeOption;
+          applyTheme(nextTheme);
+
+          try {
+            localStorage.setItem(themeStorageKey, nextTheme);
+          } catch (error) {
+            // Ignore storage failures and keep the in-memory theme change.
+          }
+        });
+      });
+    }
+
     function getDisplayQuestion(question) {
       if (!["B", "E"].includes(question.col) || !["single", "multi"].includes(question.type)) {
         return question;
@@ -1026,22 +1290,41 @@
       `;
     }
 
+    function getLikertLabel(score) {
+      const labels = {
+        1: "Strongly disagree",
+        2: "Disagree",
+        3: "Neutral",
+        4: "Agree",
+        5: "Strongly agree"
+      };
+
+      return labels[score] || `Score ${score}`;
+    }
+
+    function getLikertDisplayLabel(score) {
+      return `${getLikertLabel(score)} (${score})`;
+    }
+
     function renderScale(question) {
       return `
         <div class="scale-options">
           ${question.options.map((option) => `
-            <div class="scale-option">
+            <button
+              type="button"
+              class="scale-option"
+              aria-label="${escapeHtml(`${getLikertDisplayLabel(option.label)}: ${option.count} responses, ${formatPct(option.count, question.responses)}`)}"
+            >
               <div class="scale-option-top">
                 <div class="scale-label-wrap">
-                  <div class="scale-score">${option.label}</div>
-                  <div class="scale-caption">Score ${option.label}</div>
+                  <div class="scale-score">${getLikertDisplayLabel(option.label)}</div>
                 </div>
                 <div class="scale-value">${option.count} · ${formatPct(option.count, question.responses)}</div>
               </div>
               <div class="bar">
                 <div class="bar-fill" style="--pct:${(option.count / question.responses) * 100}"></div>
               </div>
-            </div>
+            </button>
           `).join("")}
         </div>
       `;
@@ -1157,6 +1440,7 @@
       });
     }
 
+    initThemeToggle();
     renderSummary();
     renderQuestions();
     initPieInteractions();
